@@ -1,0 +1,31 @@
+{
+  "name": "currency-converter",
+  "version": "1.0.0",
+  "description": "ALC 7days-of-code-challenge, a currency converter website.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adroit11/currency-converter.git"
+  },
+  "keywords": [
+    "ES6",
+    "PWA",
+    "Currency",
+    "Converter",
+    "Andela",
+    "Udacity",
+    "Google"
+  ],
+  "author": "Ogundiji Bolade Adio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Adroit11/currency-converter/issues"
+  },
+  "homepage": "https://github.com/Adroit11/currency-converter#readme",
+  "devDependencies": {
+    "tailwindcss": "^0.6.1"
+  }
+}
