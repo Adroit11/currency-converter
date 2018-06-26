@@ -15,7 +15,7 @@ function appendToParent(parent, child){
 }
 
 function getAllCurrency(){
-	const select = document.getElementById('currencies');
+	const select = document.querySelectorAll('.currencies');
 	const url = 'https://free.currencyconverterapi.com/api/v5/currencies';
 	fetch(url)
 	.then(response => response.json())
@@ -27,7 +27,9 @@ function getAllCurrency(){
 			let option = createElement('option');
 				option.value = `${currencyNames.id}`;
 				option.text = `${currencyNames.currencyName} (${currencyNames.currencySymbol})`;
-			appendToParent(select, option);
+			for( let i = 0; i < select.length; i++){
+				appendToParent(select[i], option);
+			}
 		}
 	})
 	.catch(function(err){
