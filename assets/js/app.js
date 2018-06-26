@@ -14,6 +14,7 @@ function appendToParent(parent, child){
 	return parent.appendChild(child);
 }
 
+//To get all the currencies details
 function getAllCurrency(){
 	const select = document.querySelectorAll('.currencies');
 	const url = 'https://free.currencyconverterapi.com/api/v5/currencies';
@@ -37,6 +38,7 @@ function getAllCurrency(){
 	});
 }
 
+// Function to do the convertion 
 function convertCurrency(amount, fromCurrency, toCurrency){
 	const query = fromCurrency + '_' + toCurrency;
 	const url = 'https://free.currencyconverterapi.com/api/v5/convert?q='+query+'&compact';
