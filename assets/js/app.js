@@ -1,3 +1,13 @@
+if ('serviceWorker' in navigator) {
+	navigator.serviceWorker.register('serviceworker.js').then(function(){
+		console.log('Serviceworker Registered!');
+	}).catch(function(error){
+		console.log('Registration failed, error: ', error);
+	})
+}
+else{
+	console.log('Service worker not supported.');
+}
 // Create HTML element
 function createElement(element){
 	return document.createElement(element);
