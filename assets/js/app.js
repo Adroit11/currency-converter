@@ -14,9 +14,9 @@ function appendToParent(parent, child){
 	return parent.appendChild(child);
 }
 
-//To get all the currencies details
 function getAllCurrency(){
-	const select = document.querySelectorAll('.currencies');
+	const select = document.getElementById('currencies');
+	const select2 = document.getElementById('currencies2');
 	const url = 'https://free.currencyconverterapi.com/api/v5/currencies';
 	fetch(url)
 	.then(response => response.json())
@@ -26,11 +26,13 @@ function getAllCurrency(){
 			//console.log(currencies[currency]);
 			let currencyNames = currencies[currency];
 			let option = createElement('option');
+				option2 = createElement('option');
 				option.value = `${currencyNames.id}`;
-				option.text = `${currencyNames.currencyName} (${currencyNames.currencySymbol})`;
-			for( let i = 0; i < select.length; i++){
-				appendToParent(select[i], option);
-			}
+				option2.value = `${currencyNames.id}`;
+				option.text = `${currencyNames.currencyName} ( ${currencyNames.currencySymbol} )`;
+				option2.text = `${currencyNames.currencyName} ( ${currencyNames.currencySymbol} )`;
+			appendToParent(select, option);
+			appendToParent(select2, option2);
 		}
 	})
 	.catch(function(err){
@@ -38,20 +40,32 @@ function getAllCurrency(){
 	});
 }
 
-// Function to do the convertion 
-function convertCurrency(amount, fromCurrency, toCurrency){
-	const query = fromCurrency + '_' + toCurrency;
-	const url = 'https://free.currencyconverterapi.com/api/v5/convert?q='+query+'&compact';
-	fromCurrency = encodeURIComponent(fromCurrency);
-	toCurrency = encodeURIComponent(toCurrency);
-	fetch(url)
-	.then(function(response){
-		console.log(response);
-		return response.json();
-	})
-	.then(function(data){
-		console.log(data);
-	})
+function convertCurrency(){
+	const displayResult = document.getElementById('convertedResult');
+	const addForm = document.forms['currency_converter'];
+	addForm.addEventListener('submit', (e) => {
+	  	e.preventDefault();
+	  	const formData = new FormData(e.target);
+	  	let fromCurrency = formData.get('from');
+	  	let toCurrency = formData.get('to');
+	  	let amount = formData.get('amount');
+
+		const query = fromCurrency + '_' + toCurrency;
+		const url = 'https://free.currencyconverterapi.com/api/v5/convert?q='+query+'&compact=ultra';
+		fromCurrency = encodeURIComponent(fromCurrency);
+		toCurrency = encodeURIComponent(toCurrency);
+		fetch(url)
+		.then(response => response.json())
+		.then(data => {
+			const ratio = data[query];
+		    const totalAmount = amount * ratio;  
+		    console.log(totalAmount);
+		    displayResult.value = totalAmount;
+		})
+		.catch(function(err){
+			console.log(JSON.stringify(err));
+		})
+	});
 }
 getAllCurrency();
 //convertCurrency(10, 'USD', 'NGN');  
