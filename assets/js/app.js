@@ -66,6 +66,13 @@ function convertCurrency(){
 		toCurrency = encodeURIComponent(toCurrency);
 		fetch(url)
 		.then(response => response.json())
+		.then(dbRate => {
+			var dbPromise = idb.open('currencyDB', 1, function (db) {
+			  if (!db.objectStoreNames.contains('rates')) {
+			    db.createObjectStore('rates', {keyPath: 'id'});
+			  }
+			});
+		})
 		.then(data => {
 			const ratio = data[query];
 		    const totalAmount = amount * ratio;  

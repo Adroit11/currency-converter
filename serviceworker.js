@@ -12,7 +12,9 @@ self.addEventListener('install', function (event) {
           '/index.html',
           '/assets/css/style.css',
           '/assets/js/app.js',
-          '/assets/img/currency.jpeg'
+          '/assets/js/idb.js',
+          '/assets/img/currency.jpeg',
+          'https://free.currencyconverterapi.com/api/v5/currencies'
         ])
     })
   )
@@ -32,25 +34,10 @@ self.addEventListener('activate', function (event) {
   )
 })
 
-self.addEventListener('fetch', event => {
-  const url = 'https://free.currencyconverterapi.com/api/v5/currencies';
-
-  // If contacting API, fetch and then cache the new data
-  if (event.request.url.indexOf(url) === 0) {
-    event.respondWith(
-      fetch(event.request).then(response =>
-        caches.open(cacheName).then(cache => {
-          cache.put(event.request.url, response.clone());
-          return response;
-        }),
-      ),
-    );
-  } else {
-    // Respond with cached content if they are matched
-    event.respondWith(
-      caches
-        .match(event.request)
-        .then(response => response || fetch(event.request)),
-    );
-  }
+self.addEventListener("fetch", function (event) {
+  event.respondWith(
+    caches.match(event.request).then(function (cacheResponse) {
+      return cacheResponse || fetch(event.request);
+    })
+  );
 });
