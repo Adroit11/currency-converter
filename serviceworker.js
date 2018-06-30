@@ -10,12 +10,12 @@ self.addEventListener('install', function (event) {
     caches.open(cacheName).then(function (cache) {
       console.log('installing cache app shell : ' + cacheName)
       return cache.addAll([
-          '/',
-          '/index.html',
-          '/assets/css/style.css',
-          '/assets/js/app.js',
-          '/assets/js/idb.js',
-          '/assets/img/currency.jpeg',
+          '/currency-converter/',
+          '/currency-converter/index.html',
+          '/currency-converter/assets/css/style.css',
+          '/currency-converter/assets/js/app.js',
+          '/currency-converter/assets/js/idb.js',
+          '/currency-converter/assets/img/currency.jpeg',
           'https://free.currencyconverterapi.com/api/v5/currencies'
         ])
     })
