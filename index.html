@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width">
+  	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<title>Currency Converter</title>
+</head>
+<body>
+<!--Nav Bar Section -->
+	<div class="bg-white w-full h-16 block lg:px-8 px-2 pt-1 pin-t pb-4">
+		<div class="flex mb-4">
+			<div class="w-3/4 h-16 pt-4">
+				<span class="text-xl text-indigo-darker">Currency Converter</span>
+	        </div>
+			<div class="w-1/4 h-16 text-right pt-4">
+				
+			</div>
+		</div>
+	</div>
+	<div class="h-auto lg:px-8 px-2 py-2 bg-grey-lighter border-b border-t border-grey-light w-full">
+		Currency Converter v1.0.0
+	</div>
+<!-- End of Nav Bar-->
+	<div class="h-auto w-full bg-image-banner py-8">
+		<div class="w-3/4 h-auto bg-indigo-darker mx-auto p-8 mt-8 rounded">
+			<div class="flex mt-8">
+			 	<div class="w-2/5 text-grey-lightest h-auto py-4">
+			 		From:
+			 	</div>
+			 	<div class="w-1/5 h-auto">
+			 		
+			 	</div>
+				<div class="w-2/5 text-grey-lightest h-auto p-4">
+					To:
+				</div>
+			</div>
+			<div class="px-0">
+				<form id="currency_converter">
+			  	<div class="flex -mx-2">
+			    	<div class="w-2/5 px-2">
+			      		<div class="h-12">
+			      			<div class="flex">
+			      				<div class="relative mr-4 h-12">
+			      					<select id="currencies" name="from" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded leading-tight">
+								        
+								    </select>
+								    <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+								        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+								    </div>
+								</div>
+			      				<div class="w-3/4">
+			      					<input class="shadow w-full appearance-none border h-12 rounded py-2 px-3 text-grey-darkest" type="text" placeholder="Amount" name="amount">
+			      				</div>
+			      			</div>
+			      		</div>
+			    	</div>
+			    	<div class="w-1/5 text-center">
+			    		<svg class="fill-current text-grey-lightest h-12 w-1/5" height="24px" fill="#005590" id="Layer_1" style="enable-background:new 0 0 24 24;" version="1.1" viewBox="0 0 24 24" width="24px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="6.0000076,22 7.4141922,20.5857544 4.8141847,17.9999924 7.4141769,15.4141846 5.9999924,14 2,17.9999924 "/><path d="M5,13H3V8c0-1.6542969,1.3457031-3,3-3h14v2H6C5.4487305,7,5,7.4482422,5,8V13z"/><path d="M18,19H4v-2h14c0.5512695,0,1-0.4482422,1-1v-5h2v5C21,17.6542969,19.6542969,19,18,19z"/><polygon points="17.9999924,2 16.5858078,3.4142456 19.1858158,6.0000076 16.5858231,8.5858154 18.0000076,10 22,6.0000076 "/></svg>
+			    	</div>
+			    	<div class="w-2/5 px-2">
+			      		<div class="h-12">
+			      			<div class="flex">
+			      				<div class="relative mr-4 h-12">
+				      				<select id="currencies2" name="to" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded leading-tight">
+
+									</select>
+									<div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+									    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+									</div>
+								</div>
+				      			<div class="w-3/4 bg-grey h-12">
+				      				<input id="convertedResult" class="shadow w-full appearance-none border h-12 rounded py-2 px-3 text-grey-darkest" type="text" readonly="readonly">
+				      			</div>
+			      			</div>
+			      		</div>
+			    	</div>
+			  	</div>
+			</div>
+			<div class="h-auto text-center">
+				<button class="w-1/2 bg-red text-grey-lightest font-semibold hover:text-white py-2 px-4 border border-red-darker hover:border-transparent rounded mt-4 mr-2" onclick="convertCurrency()">
+					convert
+				</button>
+			</div>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript" src="assets/js/idb.js"></script>
+	<script type="text/javascript" src="assets/js/app.js"></script>
+</body>
+</html>
