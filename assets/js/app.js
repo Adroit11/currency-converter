@@ -8,6 +8,12 @@ if ('serviceWorker' in navigator) {
 else{
 	console.log('Service worker not supported.');
 }
+
+const dbPromise = idb.open('currencyDB', 1, function (db) {
+	if (!db.objectStoreNames.contains('rates')) {
+		db.createObjectStore('rates', {keyPath: 'id'});
+	}
+})
 // Create HTML element
 function createElement(element){
 	return document.createElement(element);
@@ -58,32 +64,33 @@ function convertCurrency(){
 	  	const formData = new FormData(e.target);
 	  	let fromCurrency = formData.get('from');
 	  	let toCurrency = formData.get('to');
-	  	let amount = formData.get('amount');
-
-		const query = fromCurrency + '_' + toCurrency;
-		const url = 'https://free.currencyconverterapi.com/api/v5/convert?q='+query+'&compact=ultra';
-		fromCurrency = encodeURIComponent(fromCurrency);
+	  	fromCurrency = encodeURIComponent(fromCurrency);
 		toCurrency = encodeURIComponent(toCurrency);
+	  	let amount = formData.get('amount');
+	  	const query = fromCurrency + '_' + toCurrency;
+		const url = 'https://free.currencyconverterapi.com/api/v5/convert?q='+query+'&compact=ultra';
+		let networkDataReceived = false;
 		fetch(url)
-		.then(response => response.json())
-		.then(dbRate => {
-			var dbPromise = idb.open('currencyDB', 1, function (db) {
-			  if (!db.objectStoreNames.contains('rates')) {
-			    db.createObjectStore('rates', {keyPath: 'id'});
-			  }
+		  .then(function(res) {
+		    return res.json();
+		  })
+		  .then(function(data) {
+		    networkDataReceived = true;
+			dbPromise.then(db => {
+				const tx = db.transaction('rates', 'readwrite');
+			    const store = tx.objectStore('rates');
+				store.put({
+			      	rate: data,
+			      	id: `${fromCurrency}_${toCurrency}`
+			    });
+			    return tx.complete;
 			});
-		})
-		.then(data => {
-			const ratio = data[query];
-		    const totalAmount = amount * ratio;  
+		    console.log('From web', data);
+		    const ratio = data[query];
+		    const totalAmount = (amount * ratio).toFixed(2);  
 		    console.log(totalAmount);
 		    displayResult.value = totalAmount;
-		})
-		.catch(function(err){
-			console.log(JSON.stringify(err));
-		})
+		  });
 	});
 }
 getAllCurrency();
-//convertCurrency(10, 'USD', 'NGN');  
-

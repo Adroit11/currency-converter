@@ -1,3 +1,5 @@
+importScripts('/assets/js/idb.js');
+
 const appName = 'currency-converter'     
 const version = 'v1'            
 const cacheName = appName + version
