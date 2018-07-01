@@ -95,26 +95,22 @@ function convertCurrency(){
 			})
 		    console.log('From web', data);
 		    let ratio = data[query];
-		    let totalAmount = amount * ratio;  
+		    let totalAmount = parseFloat(amount * ratio).toFixed(2);  
 		    console.log(totalAmount);
 		    displayResult.value = totalAmount;
 		  })
-		  .catch(function(err){
-		  	//Operation to be perfromed when offline
-			if (!networkDataReceived) {
+		//Operation to be perfromed when offline
+		if (!networkDataReceived) {
 			  	if ('indexedDB' in window) {
 			  		//Retrieving the data from IndexDB
 			  		readAllData('rates', query)
 			    	.then(function(data) {
-			    		for(let key in data){
-			    			console.log(data[key][query]);
-			    		}
-			        	//displayResult.value = "";
-			    		//let totalAmount = amount * offlineRate; 
-					    //displayResult.value = totalAmount;
+			    		let offlineRate = data.rate[query];
+			    		console.log('From cache', data.rate[query]);
+			    		let totalAmount = parseFloat (amount * offlineRate).toFixed(2); 
+					    displayResult.value = totalAmount;
 			    	});
 				}
 			}
 		  })
-	});
 }
