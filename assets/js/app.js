@@ -77,12 +77,15 @@ const convertCurrency = () => {
 	  	}
 	  	const query = fromCurrency + '_' + toCurrency;
 		const url = 'https://free.currencyconverterapi.com/api/v5/convert?q='+query+'&compact=ultra';
+		let networkDataReceived = false;
 		//Fetch from API when online
 		fetch(url)
-		  .then(function(res) {
-		    return res.json()
+		  	.then(function(res) {
+		    	return res.json()
+			})
 		    .then(data => {
-			dbPromise.then(db => {
+		    	networkDataReceived = true;
+				dbPromise.then(db => {
 				const tx = db.transaction('rates', 'readwrite');
 			    const store = tx.objectStore('rates');
 				store.put({
@@ -96,23 +99,21 @@ const convertCurrency = () => {
 		    let totalAmount = parseFloat(amount * ratio).toFixed(2);  
 		    console.log(totalAmount);
 		    displayResult.value = totalAmount;
-		  })
-		  return;
-		 })
-	})
-	.catch(function(error){
-		//Operation to be perfromed when offline
-		if (error) {
-			if ('indexedDB' in window) {
-			  	//Retrieving the data from IndexDB
-			  	readAllData('rates', query)
-			    .then(data => {
-			    	let offlineRate = data.rate[query];
-			    	console.log('From cache', data.rate[query]);
-			    	let totalAmount = parseFloat (amount * offlineRate).toFixed(2); 
-					displayResult.value = totalAmount;
-			    });
-			}
+		    return
+		  });
+		if ('indexedDB' in window) {
+			//Retrieving the data from IndexDB
+			readAllData('rates', query)
+			.then(data => {
+			    if(data){
+			    	if(networkDataReceived === false){
+				    	let offlineRate = data.rate[query];
+					    console.log('From cache', data.rate[query]);
+					    let totalAmount = parseFloat (amount * offlineRate).toFixed(2); 
+						displayResult.value = totalAmount;
+				    }
+			    }
+			});
 		}
 	})
 }
