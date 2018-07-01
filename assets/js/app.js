@@ -30,29 +30,18 @@ function appendToParent(parent, child){
 	return parent.appendChild(child);
 }
 
-function readAllData(st) {
+function readAllData(st, data) {
   	return dbPromise
     .then(function(db) {
-      	var tx = db.transaction(st, 'readonly');
-      	var store = tx.objectStore(st);
-      	return store.getAll();
+      	let tx = db.transaction(st, 'readonly');
+      	let store = tx.objectStore(st);
+      	return store.get(data);      	
     });
 }
 
-function readKey(st, key) {
-  	return dbPromise
-    .then(function(db) {
-      	var tx = db.transaction(st, 'readonly');
-      	var store = tx.objectStore(st);
-      	return store.getKey(key);
-      	//return store.getAll();
-    });
-}
-
-function getAllCurrency(){
-	const select = document.getElementById('currencies');
-	const select2 = document.getElementById('currencies2');
-	const url = 'https://free.currencyconverterapi.com/api/v5/currencies';
+const select = document.getElementById('currencies');
+const select2 = document.getElementById('currencies2');
+const url = 'https://free.currencyconverterapi.com/api/v5/currencies';
 	fetch(url)
 	.then(response => response.json())
 	.then(function(data){
@@ -61,19 +50,18 @@ function getAllCurrency(){
 			//console.log(currencies[currency]);
 			let currencyNames = currencies[currency];
 			let option = createElement('option');
-				option2 = createElement('option');
-				option.value = `${currencyNames.id}`;
-				option2.value = `${currencyNames.id}`;
-				option.text = `${currencyNames.currencyName} ( ${currencyNames.currencySymbol} )`;
-				option2.text = `${currencyNames.currencyName} ( ${currencyNames.currencySymbol} )`;
+			option2 = createElement('option');
+			option.value = `${currencyNames.id}`;
+			option2.value = `${currencyNames.id}`;
+			option.text = `${currencyNames.currencyName} ( ${currencyNames.currencySymbol} )`;
+			option2.text = `${currencyNames.currencyName} ( ${currencyNames.currencySymbol} )`;
 			appendToParent(select, option);
 			appendToParent(select2, option2);
 		}
 	})
-	.catch(function(err){
+.catch(function(err){
 		console.log(JSON.stringify(err));
-	});
-}
+});
 
 function convertCurrency(){
 	let displayResult = document.getElementById('convertedResult');
@@ -88,6 +76,7 @@ function convertCurrency(){
 	  	let amount = formData.get('amount');
 	  	const query = fromCurrency + '_' + toCurrency;
 		const url = 'https://free.currencyconverterapi.com/api/v5/convert?q='+query+'&compact=ultra';
+		//Fetch from API when online
 		let networkDataReceived = false;
 		fetch(url)
 		  .then(function(res) {
@@ -100,7 +89,6 @@ function convertCurrency(){
 			    const store = tx.objectStore('rates');
 				store.put({
 			      	rate: data,
-			      	userData: `${fromCurrency}_${toCurrency}`,
 			      	id: `${fromCurrency}_${toCurrency}`
 			    })
 			    return tx.complete;
@@ -110,26 +98,23 @@ function convertCurrency(){
 		    let totalAmount = amount * ratio;  
 		    console.log(totalAmount);
 		    displayResult.value = totalAmount;
-		  });
-			/*if ('indexedDB' in window) {
-		  		readAllData('rates')
-		    	.then(function(data) {
-		      	if (!networkDataReceived) {
-		        	//console.log('From cache', data);
-		        	displayResult.value = "";
-		        	for(let i=0; i < data.length; i++){
-		        		let dbData = data[i];
-		        		if(dbData.length === 0) return;
-		        		for(key in dbData){
-		        			console.log(dbData[key][query]);
-		        		}
-		        	}
-		        	let ratio = dbData[key][query];
-				    let totalAmount = amount * ratio; 
-				    displayResult.value = totalAmount;
-		      	}
-		    });
-		}*/
+		  })
+		  .catch(function(err){
+		  	//Operation to be perfromed when offline
+			if (!networkDataReceived) {
+			  	if ('indexedDB' in window) {
+			  		//Retrieving the data from IndexDB
+			  		readAllData('rates', query)
+			    	.then(function(data) {
+			    		for(let key in data){
+			    			console.log(data[key][query]);
+			    		}
+			        	//displayResult.value = "";
+			    		//let totalAmount = amount * offlineRate; 
+					    //displayResult.value = totalAmount;
+			    	});
+				}
+			}
+		  })
 	});
 }
-getAllCurrency();
