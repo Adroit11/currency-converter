@@ -2,12 +2,12 @@ const staticCache = 'static-v17';
 const dynamicCache = 'dynamic-v2';
 
   const StaticFileToCache = [
-  '/currency-converter/',
-  '/currency-converter/index.html',
-  '/currency-converter/assets/css/style.css',
-  '/currency-converter/assets/js/app.js',
-  '/currency-converter/assets/js/idb.js',
-  '/currency-converter/assets/img/currency.jpeg',
+  '/',
+  '/index.html',
+  '/assets/css/style.css',
+  '/assets/js/app.js',
+  '/assets/js/idb.js',
+  '/assets/img/currency.jpeg',
   'https://free.currencyconverterapi.com/api/v5/currencies'
   ];
   
