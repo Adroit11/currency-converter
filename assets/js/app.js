@@ -81,9 +81,8 @@ const convertCurrency = () => {
 		let networkDataReceived = false;
 		fetch(url)
 		  .then(res => {
-		    return res.json();
-		  })
-		  .then(data => {
+		    return res.json()
+		    .then(data => {
 		    networkDataReceived = true;
 			dbPromise.then(db => {
 				const tx = db.transaction('rates', 'readwrite');
@@ -100,8 +99,10 @@ const convertCurrency = () => {
 		    console.log(totalAmount);
 		    displayResult.value = totalAmount;
 		  })
-		//Operation to be perfromed when offline
-		if (!networkDataReceived) {
+		 })
+		.catch(err =>{
+			//Operation to be perfromed when offline
+			if (!networkDataReceived) {
 			  	if ('indexedDB' in window) {
 			  		//Retrieving the data from IndexDB
 			  		readAllData('rates', query)
@@ -113,5 +114,6 @@ const convertCurrency = () => {
 			    	});
 				}
 			}
-		  })
+		})
+	})
 }
