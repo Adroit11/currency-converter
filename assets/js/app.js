@@ -105,13 +105,11 @@ const convertCurrency = () => {
 			//Retrieving the data from IndexDB
 			readAllData('rates', query)
 			.then(data => {
-			    if(data){
-			    	if(networkDataReceived === false){
-				    	let offlineRate = data.rate[query];
-					    console.log('From cache', data.rate[query]);
-					    let totalAmount = parseFloat (amount * offlineRate).toFixed(2); 
-						displayResult.value = totalAmount;
-				    }
+			    if(data != null){
+			    	let offlineRate = data.rate[query];
+					console.log('From cache', data.rate[query]);
+					let totalAmount = parseFloat (amount * offlineRate).toFixed(2); 
+					displayResult.value = totalAmount;
 			    }
 			});
 		}
