@@ -80,7 +80,7 @@ const convertCurrency = () => {
 		//Fetch from API when online
 		let networkDataReceived = false;
 		fetch(url)
-		  .then(res => {
+		  .then(function(res) {
 		    return res.json()
 		    .then(data => {
 		    networkDataReceived = true;
@@ -100,7 +100,7 @@ const convertCurrency = () => {
 		    displayResult.value = totalAmount;
 		  })
 		 })
-		.catch(err =>{
+		.catch(function(){
 			//Operation to be perfromed when offline
 			if (!networkDataReceived) {
 			  	if ('indexedDB' in window) {
