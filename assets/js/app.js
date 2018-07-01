@@ -1,7 +1,7 @@
 if ('serviceWorker' in navigator) {
-	navigator.serviceWorker.register('serviceworker.js').then(function(){
-		console.log('Serviceworker Registered!');
-	}).catch(function(error){
+	navigator.serviceWorker.register('serviceworker.js').then(() =>
+		console.log('Serviceworker Registered!'))
+	.catch(error =>{
 		console.log('Registration failed, error: ', error);
 	})
 }
@@ -9,30 +9,30 @@ else{
 	console.log('Service worker not supported.');
 }
 
-const dbPromise = idb.open('currencyDB', 1, function (db) {
+const dbPromise = idb.open('currencyDB', 1, db => {
 	if (!db.objectStoreNames.contains('rates')) {
 		db.createObjectStore('rates', {keyPath: 'id'});
 	}
 })
 // Create HTML element
-function createElement(element){
+const createElement = (element) => {
 	return document.createElement(element);
 }
 
 // Set Element's class/ID attributes
 
-function setAttributes(element, name, value){
+const setAttributes = (element, name, value) => {
 	return element.setAttribute(name, value);
 }
 
 // Append to the dropdown
-function appendToParent(parent, child){
+const  appendToParent = (parent, child) => {
 	return parent.appendChild(child);
 }
 
-function readAllData(st, data) {
+const readAllData = (st, data) => {
   	return dbPromise
-    .then(function(db) {
+    .then(db => {
       	let tx = db.transaction(st, 'readonly');
       	let store = tx.objectStore(st);
       	return store.get(data);      	
@@ -44,7 +44,7 @@ const select2 = document.getElementById('currencies2');
 const url = 'https://free.currencyconverterapi.com/api/v5/currencies';
 	fetch(url)
 	.then(response => response.json())
-	.then(function(data){
+	.then(data => {
 		let currencies = data.results;
 		for(currency in currencies){
 			//console.log(currencies[currency]);
@@ -59,11 +59,9 @@ const url = 'https://free.currencyconverterapi.com/api/v5/currencies';
 			appendToParent(select2, option2);
 		}
 	})
-.catch(function(err){
-		console.log(JSON.stringify(err));
-});
+.catch(err => console.log(JSON.stringify(err)));
 
-function convertCurrency(){
+const convertCurrency = () => {
 	let displayResult = document.getElementById('convertedResult');
 	const addForm = document.forms['currency_converter'];
 	addForm.addEventListener('submit', (e) => {
@@ -82,10 +80,10 @@ function convertCurrency(){
 		//Fetch from API when online
 		let networkDataReceived = false;
 		fetch(url)
-		  .then(function(res) {
+		  .then(res => {
 		    return res.json();
 		  })
-		  .then(function(data) {
+		  .then(data => {
 		    networkDataReceived = true;
 			dbPromise.then(db => {
 				const tx = db.transaction('rates', 'readwrite');
@@ -107,7 +105,7 @@ function convertCurrency(){
 			  	if ('indexedDB' in window) {
 			  		//Retrieving the data from IndexDB
 			  		readAllData('rates', query)
-			    	.then(function(data) {
+			    	.then(data => {
 			    		let offlineRate = data.rate[query];
 			    		console.log('From cache', data.rate[query]);
 			    		let totalAmount = parseFloat (amount * offlineRate).toFixed(2); 

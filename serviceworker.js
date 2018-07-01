@@ -12,7 +12,7 @@ const dynamicCache = 'dynamic-v2';
   ];
   
   // cache assets
-  self.addEventListener('install', function (event) {
+  self.addEventListener('install', event => {
   console.log('[Service Worker] Installing Service Worker ...', event);
   event.waitUntil(
     caches.open(staticCache)
@@ -23,7 +23,7 @@ const dynamicCache = 'dynamic-v2';
   )
 });
 
-self.addEventListener('activate', function (event) {
+self.addEventListener('activate', event => {
   console.log('[Service Worker] Activating Service Worker ....', event);
   event.waitUntil(
     caches.keys()
