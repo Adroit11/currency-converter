@@ -97,21 +97,22 @@ const convertCurrency = () => {
 		    console.log(totalAmount);
 		    displayResult.value = totalAmount;
 		  })
+		  return;
 		 })
-		.catch(function(error){
-			//Operation to be perfromed when offline
-			if (error) {
-			  	if ('indexedDB' in window) {
-			  		//Retrieving the data from IndexDB
-			  		readAllData('rates', query)
-			    	.then(data => {
-			    		let offlineRate = data.rate[query];
-			    		console.log('From cache', data.rate[query]);
-			    		let totalAmount = parseFloat (amount * offlineRate).toFixed(2); 
-					    displayResult.value = totalAmount;
-			    	});
-				}
+	})
+	.catch(function(error){
+		//Operation to be perfromed when offline
+		if (error) {
+			if ('indexedDB' in window) {
+			  	//Retrieving the data from IndexDB
+			  	readAllData('rates', query)
+			    .then(data => {
+			    	let offlineRate = data.rate[query];
+			    	console.log('From cache', data.rate[query]);
+			    	let totalAmount = parseFloat (amount * offlineRate).toFixed(2); 
+					displayResult.value = totalAmount;
+			    });
 			}
-		})
+		}
 	})
 }
