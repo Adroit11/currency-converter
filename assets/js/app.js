@@ -78,12 +78,10 @@ const convertCurrency = () => {
 	  	const query = fromCurrency + '_' + toCurrency;
 		const url = 'https://free.currencyconverterapi.com/api/v5/convert?q='+query+'&compact=ultra';
 		//Fetch from API when online
-		let networkDataReceived = false;
 		fetch(url)
 		  .then(function(res) {
 		    return res.json()
 		    .then(data => {
-		    networkDataReceived = true;
 			dbPromise.then(db => {
 				const tx = db.transaction('rates', 'readwrite');
 			    const store = tx.objectStore('rates');
@@ -100,9 +98,9 @@ const convertCurrency = () => {
 		    displayResult.value = totalAmount;
 		  })
 		 })
-		.catch(function(){
+		.catch(function(error){
 			//Operation to be perfromed when offline
-			if (!networkDataReceived) {
+			if (error) {
 			  	if ('indexedDB' in window) {
 			  		//Retrieving the data from IndexDB
 			  		readAllData('rates', query)
