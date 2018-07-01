@@ -74,6 +74,9 @@ function convertCurrency(){
 	  	fromCurrency = encodeURIComponent(fromCurrency);
 		toCurrency = encodeURIComponent(toCurrency);
 	  	let amount = formData.get('amount');
+	  	if (!amount) {
+	  		alert('Please input a valid amount');
+	  	}
 	  	const query = fromCurrency + '_' + toCurrency;
 		const url = 'https://free.currencyconverterapi.com/api/v5/convert?q='+query+'&compact=ultra';
 		//Fetch from API when online
